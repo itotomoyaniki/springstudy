@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" charset="UTF-8">
+<title>inputの勉強</title>
+</head>
+<body>
+	<h1 th:text="${hotel}">ホテルの予約を取ろう</h1>
+	<form action="/input" method="Post">
+		<p th:text="${people}">何名様の宿泊ですか？</p>
+		<input type="radio"name="people" value="peopleone"id="one">
+		<label for="one">１名</label>
+		<input type="radio" name="people" value="peopletwo" id="two">
+		<label for="two">２名 </label>
+		<input type="radio" name="people" value="peoplethree" id="three">
+		<label for="three">3名 </label>
+		<p th:text="${room}">部屋の種類は？</p>
+		<select name="room">
+			<option value="normal">ノーマル</option>
+			<option value="capsule">カプセル</option>
+			<option value="rich">リッチ</option>
+			<option value="love">ラブ</option>
+			<option value="poor">貧しい</option>
+		</select>
+		<P th:text="${meal}">食事はどうされますか？</P>
+		<select name="meal">
+			<option value="japan">和食</option>
+			<option value="western">洋食</option>
+			<option value="china">中華</option>
+			<option value="korea">韓国</option>
+			<option value="no">食べない</option>
+		</select>
+		
+		<input type="submit" value="送信">
+	</form>
+</body>
+</html>

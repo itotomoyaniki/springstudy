@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+	<html>
+		<head>
+			<meta http-equiv="content-type" charset="UTF-8">
+			<title>Insert title here</title>
+		</head>
+		<body>
+			<form action="/day20" method=POST>
+				<P th:text="${num}">階乗の計算をします。</P>
+				<lable>階乗をしたい値を入れてください</lable>
+				<input type="text" name="numVal" th:value="${number}">
+				<input type="submit" value="送信">
+			</form>
+		</body>
+	</html>
