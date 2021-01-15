@@ -92,29 +92,29 @@ public class MainController {
 //	}
 	
 //	day21の課題　素数判定マシーン
-//	@RequestMapping("/{number}")
-//	public ModelAndView day21(@PathVariable int number, ModelAndView mv) {
-//		if(number==1) {
-//			mv.addObject("answer",number+"は素数ではありません...");
-//		}
-//		else if(number==2) {
-//			mv.addObject("answer",number+"は素数です！");
-//		}
-//		else {
-//			for(int a=2;a<number;a++) {
-//				if(number%a==0) {
-//					mv.addObject("answer",number+"は素数ではありません...");
-//					break;
-//				}
-//				else {
-//					mv.addObject("answer",number+"は素数です！");
-//				}
-//			}
-//		}
-//		mv.setViewName("day21");
-//		return mv;
-//	}
-//	
+	@RequestMapping("/{number}")
+	public ModelAndView day21(@PathVariable int number, ModelAndView mv) {
+		if(number==1) {
+			mv.addObject("answer",number+"は素数ではありません...");
+		}
+		else if(number==2) {
+			mv.addObject("answer",number+"は素数です！");
+		}
+		else {
+			for(int a=2;a<number;a++) {
+				if(number%a==0) {
+					mv.addObject("answer",number+"は素数ではありません...");
+					break;
+				}
+				else {
+					mv.addObject("answer",number+"は素数です！");
+				}
+			}
+		}
+		mv.setViewName("day21");
+		return mv;
+	}
+	
 //	inputタグの課題
 	@RequestMapping(value="/input",method=RequestMethod.GET)
 	public ModelAndView inputGet(ModelAndView mv) {
@@ -158,11 +158,33 @@ public class MainController {
 	@RequestMapping(value="/day22")
 	public ModelAndView day22Post(ModelAndView mv){
 		ArrayList<String[]>customers = new ArrayList<String[]>();
-		customers.add(new String[]{"佐藤HTML太郎","35歳","男性"});
-		customers.add(new String[]{"鈴木Java五郎","24歳","男性"});
-		customers.add(new String[]{"高橋CSS子","29歳","女性"});
+		customers.add(new String[]{"佐藤HTML太郎","35歳","男性","群馬"});
+		customers.add(new String[]{"鈴木Java五郎","24歳","男性","新潟"});
+		customers.add(new String[]{"高橋CSS子","29歳","女性","石川"});
+		customers.add(new String[]{"お肉太郎","29歳","トランスジェンダー","岐阜"});
+		customers.add(new String[]{"焼肉さん","31歳","トランスジェンダー","神奈川"});
 		mv.addObject("customers",customers);
 		mv.setViewName("day22");
+		return mv;
+	}
+	@RequestMapping(value="/day23")
+	public ModelAndView day23Post(ModelAndView mv) {
+//		ArrayList<String[]>foods = new ArrayList<String[]>();
+		ArrayList<int[]>numbers=new ArrayList<int[]>();
+		numbers.add(new int[] {1,2,3,4,5,6,7});
+		numbers.add(new int[] {1,2,3,4,5,6,7});
+		numbers.add(new int[] {1,2,3,4,5,6,7});
+//		foods.add(new String[]{"りんご","洋梨","みかん"});
+//		foods.add(new String[]{"マンゴー","マンゴスチン","チェリモヤ"});
+//		foods.add(new String[]{"ぶどう","ぶどう","なし"});
+//		mv.addObject("foods",foods);
+		mv.addObject("numbers",numbers);
+		mv.setViewName("day23");
+		return mv;
+	}
+	@RequestMapping("/copy")
+	public ModelAndView copy(ModelAndView mv) {
+		mv.setViewName("copy");
 		return mv;
 	}
 }

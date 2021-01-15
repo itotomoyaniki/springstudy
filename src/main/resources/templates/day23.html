@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="content-type" charset="UTF-8">
+	</head>
+	<body>
+		<h1>果物</h1>
+		<table>
+		<tr><th>一位</th><th>二位</th><th>三位</th></tr>
+	 	<tr th:each="n:${numbers}">
+			<td th:text="${n[0]}"></td>
+			<td th:text="${n[1]}"></td>
+			<td th:text="${n[2]}"></td> 
+		</tr>	
+		</table>
+	</body>
+</html>

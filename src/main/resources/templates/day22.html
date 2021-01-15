@@ -5,13 +5,15 @@
 	</head>
 	<body>
 		<h1>顧客リスト</h1>
+		<h1>顧客リスト</h1>
 		<table>
-		<tr><th>名前</th><th>年齢</th><th>性別</th></tr>
+		<tr><th>名前</th><th>年齢</th><th>性別</th><th>住所</th></tr>
 		<tr th:each="c:${customers}">
 			<td th:text="${c[0]}"></td>
 			<td th:text="${c[1]}"></td>
 			<td th:text="${c[2]}"></td>
-		</tr>	
+			<td th:text="${c[3]}"></td>
+		</tr>
 		</table>
 	</body>
 </html>
