@@ -1,17 +1,36 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
 	<head>
 		<meta http-equiv="content-type" charset="UTF-8">
+		<link rel="stylesheet" href="css/index.css">
+		<title>掲示板投稿</title>
 	</head>
 	<body>
-		<h1>果物</h1>
-		<table>
-		<tr><th>一位</th><th>二位</th><th>三位</th></tr>
-	 	<tr th:each="n:${numbers}">
-			<td th:text="${n[0]}"></td>
-			<td th:text="${n[1]}"></td>
-			<td th:text="${n[2]}"></td> 
-		</tr>	
-		</table>
+		<div>
+					
+		</div>
+		
+		<form method="post" action="/day23" th:object="${dataModel}">
+				<p th:text="${nameError}"></p>		
+			<h1>掲示板</h1>
+				<lable>名前</lable><input type="text" name="name">
+			<!-- 	<p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>	 -->	 
+				<lable>投稿内容</lable><textarea rows="1" cols="100" name="mail"></textarea>
+				
+			<!-- 	<p th:if="${#fields.hasErrors('mail')}" th:errors="*{mail}"></p> -->
+			<input type="submit" value="投稿" >
+		</form>
+		<h1>投稿内容</h1>
+		 <h1 th:text="${error}"></h1> 
+		<div class="text" th:each="d:${data}">
+		<!--  投稿日時の実装　データベースに保存される　空白のとき　エラー　バリデーションで検索-->
+			<p>番号 <span th:text="${d.id}"></span></p>
+			 <p>投稿名 <span th:text="${d.name}"></span></p>
+			<p>投稿内容 <span th:text="${d.mail}"></span></p> 
+		 	<p>投稿日時 <span th:text="${d.clock}"></span></p>
+			<form method="post" action="/delete/day23"> 
+				<input type="hidden" name="id" th:value="${d.id}">
+				<input type="submit" value="削除"></form>
+		</div>
 	</body>
 </html>

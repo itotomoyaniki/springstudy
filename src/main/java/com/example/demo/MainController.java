@@ -1,14 +1,24 @@
 package com.example.demo;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import jdk.internal.org.jline.utils.Log;
 @Controller
 public class MainController {
 	@RequestMapping("/")
@@ -127,31 +137,31 @@ public class MainController {
 	}
 	@RequestMapping(value="/input",method=RequestMethod.POST)
 	public ModelAndView inputPost(ModelAndView mv,
-	@RequestParam("people")String people,
-	@RequestParam("room")String room,
-	@RequestParam("meal")String meal) {
-		String[]peo={"peopleone","peopletwo","peoplethree"};
+	@RequestParam("people")int people,
+	@RequestParam("room")int room,
+	@RequestParam("meal")int meal) {
+		int[]roomrate= {10000,4500,45000,8000,400};
+		int[]mealrate= {2340,2300,4500,800,0};
+		int rooms=0;
+		int meals=0;
 		String[]num={"１名様","２名様","３名様"};
-		String[]rooms= {"normal","capsule","rich","love","poor"};
 		String[]roomname= {"ノーマル","カプセル","リッチ","ラブ","貧しい"};
-		String[]meals= {"japan","western","china","korea","no"};
 		String[]mealname={"和食","洋食","中華","韓国","食べない"};
-		for(int a=0;a<3;a++) {
-			if(people.equals(peo[a])) {
+		for(int a=0;a<5;a++) {
+			if(people==a) {
 				mv.addObject("people",num[a]);
 			}
-		}
-		for(int a=0;a<5;a++) {
-			if(room.equals(rooms[a])) {
+			if(room==a) {
+				rooms+=roomrate[a];
 				mv.addObject("room",roomname[a]);
 			}
-		}
-		for(int a=0;a<5;a++) {
-			if(meal.equals(meals[a])) {
+			if(meal==a) {
+				meals+=mealrate[a];
 				mv.addObject("meal",mealname[a]);
 			}
 		}
 		mv.addObject("hotel","予約の確認です");
+		mv.addObject("num","利用料金は"+(rooms+meals)*(people+1)+"円です");
 		mv.setViewName("inputstudy");
 		return mv;
 	 }
@@ -167,26 +177,109 @@ public class MainController {
 		mv.setViewName("day22");
 		return mv;
 	}
-	@RequestMapping(value="/day23")
+	@RequestMapping(value="/number")
 	public ModelAndView day23Post(ModelAndView mv) {
 //		ArrayList<String[]>foods = new ArrayList<String[]>();
 		ArrayList<int[]>numbers=new ArrayList<int[]>();
 		numbers.add(new int[] {1,2,3,4,5,6,7});
 		numbers.add(new int[] {1,2,3,4,5,6,7});
 		numbers.add(new int[] {1,2,3,4,5,6,7});
-//		foods.add(new String[]{"りんご","洋梨","みかん"});
-//		foods.add(new String[]{"マンゴー","マンゴスチン","チェリモヤ"});
-//		foods.add(new String[]{"ぶどう","ぶどう","なし"});
-//		mv.addObject("foods",foods);
 		mv.addObject("numbers",numbers);
+		mv.setViewName("number");
+		return mv;
+	}
+//	
+	@Autowired
+	UserDataRepository repository;
+	
+	@RequestMapping(value="/data", method = RequestMethod.GET)
+	public ModelAndView UserDataget(ModelAndView mv) {
+		List<UserData> customers = repository.findAll();
+		mv.addObject("customers",customers);
+		mv.setViewName("userdata");
+		return mv;
+	}
+	
+	@RequestMapping(value="/data", method=RequestMethod.POST)
+	public ModelAndView UserDatapost(@ModelAttribute("formModel")UserData userData,ModelAndView mv) {
+		repository.saveAndFlush(userData);
+		return new ModelAndView("redirect:/data");
+	}
+//	day23の課題
+	@Autowired
+	Boarddata boarddata;
+//	@Autowired
+//	BoardtableRepository boardtable;
+	
+	@RequestMapping(value="/day23",method=RequestMethod.GET)
+	public ModelAndView dataget(ModelAndView mv) {
+		List<Board>data=boarddata.findAll();
+		mv.addObject("data",data);
 		mv.setViewName("day23");
 		return mv;
 	}
-	@RequestMapping("/copy")
-	public ModelAndView copy(ModelAndView mv) {
-		mv.setViewName("copy");
+	@RequestMapping(value="/day23",method=RequestMethod.POST)
+	public ModelAndView datapost(@Validated@ModelAttribute("dataModel")Board data,BindingResult error, ModelAndView mv) {
+		String message=" ";
+		if(error.hasErrors()) {
+			for(FieldError fieldError : error.getFieldErrors()) {
+				message+=fieldError.getDefaultMessage();
+			}
+			List<Board>boarddatas=boarddata.findAll();
+			mv.addObject("nameError",message);
+			mv.addObject("data",boarddatas);
+			mv.setViewName("day23");
+			return mv;
+		}	
+		Date dateObj=new Date();
+		SimpleDateFormat format=new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		String display=format.format(dateObj);
+		data.setClock(display);
+		boarddata.saveAndFlush(data);
+		return new ModelAndView("redirect:/day23");
+	}
+	@RequestMapping(value="/delete/day23",method=RequestMethod.POST)
+	public ModelAndView deleteday23(@RequestParam("id")long id,ModelAndView mv) {
+		boarddata.deleteById(id);
+		return new ModelAndView("redirect:/day23");
+	}
+//	day24の記述　findByIdの記述
+	@RequestMapping(value="/mypage/{id}",method=RequestMethod.GET)
+	public ModelAndView mypage(@ModelAttribute UserData userData, ModelAndView mv,@PathVariable long id) {
+		Optional<UserData> user=repository.findById(id);
+		mv.addObject("user",user.get());
+		mv.setViewName("mypage");
 		return mv;
 	}
-}
+//	findByIdNotNullOrderDesc();の記述
+//	@RequestMapping(value="/mypage/",method=RequestMethod.GET)
+//	public ModelAndView mypage(@ModelAttribute UserData userData, ModelAndView mv){
+//		List<UserData> user=repository.findByIdIsNotNullOrderByIdDesc();
+//		mv.addObject("user",user);
+//		mv.setViewName("mypage");
+//		return mv;
+//	}
+//	Update
+	@RequestMapping(value="/update/{id}",method=RequestMethod.GET)
+	public ModelAndView mypageGet(@ModelAttribute UserData userData,ModelAndView mv,@PathVariable long id) {
+		Optional<UserData> user=repository.findById(id);
+		mv.addObject("userData",user.get());
+		mv.setViewName("update");
+		return mv;
+	}
+	@RequestMapping(value="/update/",method=RequestMethod.POST)
+	public ModelAndView mypagePost(@ModelAttribute UserData userData,ModelAndView mv) {
+		repository.saveAndFlush(userData);
+		return new ModelAndView("redirect:/data");
+	}
+//	削除
+	@RequestMapping(value="/delete/",method=RequestMethod.POST)
+	public ModelAndView delete(@RequestParam("id")long id,ModelAndView mv) {
+		repository.deleteById(id);
+		return new ModelAndView("redirect:/data");
+	}
+
+	}
+
 
 

@@ -8,30 +8,30 @@
 	<h1 th:text="${hotel}">ホテルの予約を取ろう</h1>
 	<form action="/input" method="Post">
 		<p th:text="${people}">何名様の宿泊ですか？</p>
-		<input type="radio"name="people" value="peopleone"id="one">
+		<input type="radio"name="people" value="0"id="one">
 		<label for="one">１名</label>
-		<input type="radio" name="people" value="peopletwo" id="two">
+		<input type="radio" name="people" value="1" id="two">
 		<label for="two">２名 </label>
-		<input type="radio" name="people" value="peoplethree" id="three">
+		<input type="radio" name="people" value="2" id="three">
 		<label for="three">3名 </label>
 		<p th:text="${room}">部屋の種類は？</p>
 		<select name="room">
-			<option value="normal">ノーマル</option>
-			<option value="capsule">カプセル</option>
-			<option value="rich">リッチ</option>
-			<option value="love">ラブ</option>
-			<option value="poor">貧しい</option>
+			<option value="0">ノーマル</option>
+			<option value="1">カプセル</option>
+			<option value="2">リッチ</option>
+			<option value="3">ラブ</option>
+			<option value="4">貧しい</option>
 		</select>
 		<P th:text="${meal}">食事はどうされますか？</P>
 		<select name="meal">
-			<option value="japan">和食</option>
-			<option value="western">洋食</option>
-			<option value="china">中華</option>
-			<option value="korea">韓国</option>
-			<option value="no">食べない</option>
+			<option value="0">和食</option>
+			<option value="1">洋食</option>
+			<option value="2">中華</option>
+			<option value="3">韓国</option>
+			<option value="4">食べない</option>
 		</select>
-		
 		<input type="submit" value="送信">
+		<h2	th:text="${num}"></h2>
 	</form>
 </body>
 </html>

@@ -2,3 +2,9 @@ h1{
 color:red;
 }
 
+.text{
+	border-bottom:solid 1px;
+}
+p{
+	color:blue;
+}
