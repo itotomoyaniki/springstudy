@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="content-type" charset="UTF-8">
+		<link rel="styletheet" href="">
+		<title>Insert title here</title>
+	</head>
+	<body>
+		<header th:fragment="header_parts">
+			<h2 th:text="${h1}">いろんなでデータを登録しよう</h2>
+		</header>
+		<nav th:fragment="nav_parts">
+			<ul>
+				<li><a href="/bulletinboard">投稿情報</a></li>
+				<li><a href="/homepage">ユーザー情報</a></li>
+			</ul>
+		</nav>
+		<footer th:fragment="footer_parts">
+			<ul>
+			<li>ユーザー情報</li>
+			<li>こんなもん</li>
+			<li>ええやつ</li>
+			</ul>
+		</footer>
+		
+	</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="content-type" charset="UTF-8">
+		<link rel="stylesheet" href="">
+		<title>ユーザー登録</title>
+	</head>
+	<body>
+		<header th:include="parts::header_parts"></header>
+		<nav th:include="parts::nav_parts"></nav>
+		<h1>ユーザー登録をしよう</h1>
+		<form method="post" action="/homepage" th:object="${userdatamodel}">
+			<p>名前</p>
+			<input type="text" name="name">
+			<p>性別</p>
+			<select name="sex">
+				<option value="男性" >男性</option>	
+				<option value="女性">女性</option>	
+				<option value="LGBTQ">LGBTQ</option>	
+			</select>
+			<p>年齢</p>
+			<select name="age">
+				<option value="10代">10代</option>
+				<option value="20代">20代</option>
+				<option value="30代">30代</option>
+				<option value="40代">40代</option>
+				<option value="50代">50代</option>
+				<option value="60代">60代</option>
+				<option value="70代以上">70代以上</option>
+			</select>
+			<input type="submit" value="登録">
+		</form>
+		 <div class="user" th:each="u:${userdata}">
+		 	<h2>ユーザー情報</h2>
+			<p>名前　<span th:text="${u.name}"></span></p>
+			<p>性別	<span th:text="${u.sex}"></span></p>
+			<p>年齢　<span th:text="${u.age}"></span></p>
+		<!-- 	<form method="post" action="/deletehomepage">
+				<input type="hidden" name="name" th:value="{u.name}">
+				<input type="submit" value="削除">
+			</form> -->
+		 </div>
+		 <footer th:include="parts::footer_parts"></footer>
+	</body>
+</html>

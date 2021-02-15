@@ -7,5 +7,8 @@
 //
 //@Repository
 //public interface BoardtableRepository extends JpaRepository<Boardtable, Long>{
-//	List<Boardtable> findOne(String name);
+//
+//	void saveAndFlush(Board data);
+//
+//	List<Boardtable> findOne(Board data);
 //}

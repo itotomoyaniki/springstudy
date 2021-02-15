@@ -6,7 +6,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.xml.crypto.Data;
+import javax.xml.stream.events.Comment;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -212,25 +218,22 @@ public class MainController {
 //	BoardtableRepository boardtable;
 	
 	@RequestMapping(value="/day23",method=RequestMethod.GET)
-	public ModelAndView dataget(ModelAndView mv) {
-		List<Board>data=boarddata.findAll();
-		mv.addObject("data",data);
+	public ModelAndView dataget(@ModelAttribute("dataModel")Board board, ModelAndView mv) {
+		List<Board>datas=boarddata.findAll();
+		mv.addObject("data",datas);
+		mv.addObject("dataModel",board);
 		mv.setViewName("day23");
 		return mv;
 	}
 	@RequestMapping(value="/day23",method=RequestMethod.POST)
-	public ModelAndView datapost(@Validated@ModelAttribute("dataModel")Board data,BindingResult error, ModelAndView mv) {
-		String message=" ";
+	public ModelAndView datapost(@Validated@ModelAttribute("dataModel")Board data,BindingResult error,HttpServletRequest httpServletRequest, ModelAndView mv) {
 		if(error.hasErrors()) {
-			for(FieldError fieldError : error.getFieldErrors()) {
-				message+=fieldError.getDefaultMessage();
-			}
 			List<Board>boarddatas=boarddata.findAll();
-			mv.addObject("nameError",message);
 			mv.addObject("data",boarddatas);
 			mv.setViewName("day23");
 			return mv;
 		}	
+		
 		Date dateObj=new Date();
 		SimpleDateFormat format=new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		String display=format.format(dateObj);
@@ -279,7 +282,92 @@ public class MainController {
 		return new ModelAndView("redirect:/data");
 	}
 
+//	一対多の勉強
+	@Autowired
+	private UserRepository userRepo;
+	@Autowired
+	private CommentRepository commentRepo;
+	
+	@RequestMapping(value="/kadai",method=RequestMethod.GET)
+	public ModelAndView kadaiget(@ModelAttribute("kadaimodel")user user, ModelAndView mv) {
+		List<comment> commentlist=commentRepo.findAll();
+		List<user> userlist=userRepo.findAll();
+		mv.addObject("kadaidata",userlist);
+		mv.addObject("kadaimodel",user);
+		mv.setViewName("kadai");
+		return mv;
 	}
-
+	@RequestMapping(value="/kadai",method=RequestMethod.POST)
+	public ModelAndView kadaiset(@ModelAttribute("kadaimodel") user user,HttpServletRequest httpServletRequest,@RequestParam("username")String names, ModelAndView mv) {
+		String username=httpServletRequest.getRemoteUser();
+		System.out.print(names);
+		comment comment=new comment();
+		comment.setName(names);
+		commentRepo.save(comment);
+		userRepo.saveAndFlush(user);
+		return new ModelAndView("redirect:/kadai");
+		
+	}
+	
+	@RequestMapping(value="/deletekadai",method=RequestMethod.POST)
+	public ModelAndView kadaidelete(@RequestParam("id")long id,ModelAndView mv) {
+		userRepo.deleteById(id);
+		return new ModelAndView("redirect:/kadai");
+	}
+//	ページ作り
+	@Autowired
+	HomePageRepository homepageRepo;
+	@Autowired
+	bulletinboardRepository bulletinboardRepo;
+	
+	@RequestMapping(value="/homepage",method=RequestMethod.GET)
+	public ModelAndView homepageget(@ModelAttribute("userdatamodel")HomePageData homepagedata,ModelAndView mv) {
+		List<HomePageData>pagedata=homepageRepo.findAll();
+		mv.addObject("h1","いろんなデータを登録しよう");
+		mv.addObject("userdata",pagedata);
+		mv.addObject("userdatamodel",homepagedata);
+		mv.setViewName("homepage");
+		return mv;
+	}
+	
+	@RequestMapping(value="/homepage",method=RequestMethod.POST)
+	public ModelAndView homepageset(@ModelAttribute("userdatamodel")HomePageData homepagedata,
+		@RequestParam("name")String name,
+		@RequestParam("sex")String sex,
+		@RequestParam("age")String age,
+		ModelAndView mv) {
+			homepagedata.setName(name);
+			homepagedata.setSex(sex);
+			homepagedata.setAge(age);
+			homepageRepo.saveAndFlush(homepagedata);
+			return new ModelAndView("redirect:/homepage");
+	}
+	@RequestMapping(value="/bulletinboard",method=RequestMethod.GET)
+	public ModelAndView bulletinboardget(@ModelAttribute("bulletindata")bulletinboarddata bulletinboarddata,ModelAndView mv) {
+		List<bulletinboarddata>homepagedatalist=bulletinboardRepo.findAll();
+		mv.addObject("bulletindata",bulletinboarddata);
+		mv.addObject("homepagedata",homepagedatalist);
+		mv.addObject("h1","掲示板に投稿してみよう");
+		mv.setViewName("bulletinboard");
+		return mv;
+	}
+	@RequestMapping(value="/bulletinboard",method=RequestMethod.POST)
+	public ModelAndView bulletinboardset(@Validated@ModelAttribute("bulletindata")bulletinboarddata bulletinboarddata,BindingResult error,@RequestParam("text")String text,ModelAndView mv) {
+		if(error.hasErrors()) {
+			List<bulletinboarddata>homepagedatalist=bulletinboardRepo.findAll();
+			mv.addObject("bulletindata",bulletinboarddata);
+			mv.addObject("homepagedata",homepagedatalist);
+			mv.addObject("h1","掲示板に投稿してみよう");
+			mv.setViewName("bulletinboard");
+			return mv;
+		}
+		System.out.println(bulletinboarddata);
+		bulletinboarddata data=new bulletinboarddata();
+		data.setText(text);
+		bulletinboardRepo.saveAndFlush(data);
+		return new ModelAndView("redirect:/bulletinboard");
+	}
+	
+}
 
 

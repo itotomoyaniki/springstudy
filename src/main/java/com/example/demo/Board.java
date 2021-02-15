@@ -23,11 +23,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-
-
-
-
-
 @Entity
 @Table(name="day23db")
 public class Board {
@@ -50,6 +45,8 @@ public class Board {
 	@Column(name="clock")
 	private String clock;
 	
+	
+	
 	public long getId() { return id; }
 	public void setid(long id) { this.id = id; }
 	
@@ -63,12 +60,16 @@ public class Board {
 	public String getMail() { return mail; }
 	public void setMail(String mail) { this.mail = mail; }
 	
+//	@OneToMany(mappedBy="user")
+//	private List<Boardtable> boardList;
+//	public List<Boardtable> getList() {return boardList;}
+//	public void setList(List boardList) {this.boardList=boardList;}
+//	
+	
 	public Object getFieldErrors() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 	
-//	@OneToMany(mappedBy="user")
-//	private List<Boardtable> boardList;
 	
 }

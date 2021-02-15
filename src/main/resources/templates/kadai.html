@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="content-type" charset="UTF-8">
+		<link rel="stylesheet" href="css/index.css">
+		<title>一対多</title>
+	</head>
+	<body>
+		<h1>ユーザー登録</h1>
+		<form method="post" action="/kadai" th:Object="${kadaimmodel}">
+			<p>名前入力欄</p>
+			 <input type="text" name="username">
+			 <p>パスワード </p>
+			 <input type="pass" name="password">
+			 <input type="submit" value="登録" >
+		</form>
+		<h1>登録画面</h1>
+			<div class="text" th:each="k:${kadaidata}">
+				<p>ID <span th:text="${k.id}"></span></p>
+				<p>名前 <span th:text="${k.username}"></span></p>
+				<p>パスワード <span>＊＊＊＊＊＊＊＊</span></p>
+				<form method="post" action="/deletekadai"> 
+					<input type="hidden" name="id" th:value="${k.id}">
+					<input type="submit" value="削除">
+				</form>
+		</div>
+			
+			</div>
+	</body>
+</html>
