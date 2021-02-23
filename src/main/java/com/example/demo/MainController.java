@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -331,14 +332,24 @@ public class MainController {
 	}
 	
 	@RequestMapping(value="/homepage",method=RequestMethod.POST)
-	public ModelAndView homepageset(@ModelAttribute("userdatamodel")HomePageData homepagedata,
-		@RequestParam("name")String name,
+	public ModelAndView homepageset(@Validated@ModelAttribute("userdatamodel")HomePageData homepagedata,BindingResult error,
+//		@RequestParam("name")String name,
 		@RequestParam("sex")String sex,
 		@RequestParam("age")String age,
 		ModelAndView mv) {
-			homepagedata.setName(name);
-			homepagedata.setSex(sex);
-			homepagedata.setAge(age);
+		System.out.println(homepagedata.getName());
+			if(error.hasErrors()) {
+				System.out.println("エラー");
+				List<HomePageData>pagedata=homepageRepo.findAll();
+				mv.addObject("userdata",pagedata);
+				mv.addObject("userdatamodel",homepagedata);
+				mv.setViewName("homepage");
+				return mv;
+			}
+			
+//			homepagedata.setName(name);
+//			homepagedata.setSex(sex);
+//			homepagedata.setAge(age);
 			homepageRepo.saveAndFlush(homepagedata);
 			return new ModelAndView("redirect:/homepage");
 	}
@@ -355,19 +366,30 @@ public class MainController {
 	public ModelAndView bulletinboardset(@Validated@ModelAttribute("bulletindata")bulletinboarddata bulletinboarddata,BindingResult error,@RequestParam("text")String text,ModelAndView mv) {
 		if(error.hasErrors()) {
 			List<bulletinboarddata>homepagedatalist=bulletinboardRepo.findAll();
+		
+			System.out.println(homepagedatalist);
 			mv.addObject("bulletindata",bulletinboarddata);
 			mv.addObject("homepagedata",homepagedatalist);
 			mv.addObject("h1","掲示板に投稿してみよう");
 			mv.setViewName("bulletinboard");
 			return mv;
 		}
-		System.out.println(bulletinboarddata);
+		
+		long id=162;
+		Optional<HomePageData> homepagedata=homepageRepo.findById(id);
+		System.out.println();
 		bulletinboarddata data=new bulletinboarddata();
 		data.setText(text);
+		data.setHomepagedata(homepagedata.get());
 		bulletinboardRepo.saveAndFlush(data);
 		return new ModelAndView("redirect:/bulletinboard");
 	}
 	
-}
+	}
+	
+	
+	
+
+
 
 

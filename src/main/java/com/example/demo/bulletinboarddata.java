@@ -24,17 +24,17 @@ public class bulletinboarddata {
 	
 	@ManyToOne
 	@JoinColumn(name="username")
-	private bulletinboarddata bulletinboarddata;
+	private HomePageData homepagedata;
 	
 	@Column
-	@NotBlank(message="空欄にしないでください")
+//	@NotBlank(message="空欄にしないでください")
 	private String text;
 	
 	public long getId() {return id;}
-	private void setId(long id) {this.id=id;}
+	public void setId(long id) {this.id=id;}
 	
-	public bulletinboarddata getBulletinboarddata() {return bulletinboarddata;}
-	private void setBulletinboarddata(bulletinboarddata bulletinboarddata) {this.bulletinboarddata=bulletinboarddata;}
+	public HomePageData getHomepagedata() {return homepagedata;}
+	public void setHomepagedata(HomePageData homepagedata) {this.homepagedata=homepagedata;}
 	
 	public String getText() {return text;}
 	void setText(String text) {this.text=text;}

@@ -8,13 +8,13 @@
 		<header th:include="parts::header_parts"></header>
 		<nav th:include="parts::nav_parts"></nav>
 		<form method="post" action="/bulletinboard" th:object="${bulletindata}">
-			<p>ユーザー名</p>
+			<p>ユーザー名 <span></span></p>
 			<textarea name="text" rows="4" cols="40">ここに投稿してください</textarea>
 			<p th:if="${#fields.hasErrors('text')}" th:errors="*{text}"></p> 
 			<input type="submit" value="投稿">
 		</form>
 		 <div class="user" th:each="h:${homepagedata}">
-			<p>名前　<span th:text="${h.bulletinboarddata}"></span></p>
+			<p>名前　<span th:text="${h.homepagedata}"></span></p>
 			<p>投稿内容　<span th:text="${h.text}"></span></p>
 		</div>
 		<footer th:include="parts::footer_parts"></footer>

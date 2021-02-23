@@ -18,11 +18,11 @@ import javax.validation.constraints.NotBlank;
 @Table(name="homepagedata")
 public class HomePageData {
 
-//	@Id @GeneratedValue(strategy=GenerationType.AUTO)
-//	@Column
-//	private long id;
+	@Id @GeneratedValue(strategy=GenerationType.AUTO)
+	@Column
+	private long id;
 	
-	@Id
+	@Validation
 	@Column
 	private String name;
 	
@@ -32,23 +32,24 @@ public class HomePageData {
 	@Column
 	private String age;
 	
-	@OneToMany(fetch=FetchType.EAGER,mappedBy="bulletinboarddata")
+	@OneToMany(fetch=FetchType.EAGER,mappedBy="homepagedata")
 	private List<bulletinboarddata> bulletinboarddatalist;
 	
-//	public long getId() {return id;}
-//	void setId(long id) {this.id=id;}
+	public long getId() {return id;}
+	public void setId(long id) {this.id=id;}
 	
 	public String getName(){return name;}
-	void setName(String name) {this.name=name;}
+	public void setName(String name) {this.name=name;}
 	
 	public String getSex() {return sex;}
-	void setSex(String sex) {this.sex=sex;}
+	public void setSex(String sex) {this.sex=sex;}
 	
 	public String  getAge() {return age;}
-	void setAge(String age) {this.age=age;}
+	public void setAge(String age) {this.age=age;}
 	
-	public List getList() {return bulletinboarddatalist;}
-	void setList(List<bulletinboarddata> bulletinboarddatalist) {this.bulletinboarddatalist=bulletinboarddatalist;}
+	
+	public List<bulletinboarddata> getList() {return bulletinboarddatalist;}
+	public void setList(List<bulletinboarddata> bulletinboarddatalist) {this.bulletinboarddatalist=bulletinboarddatalist;}
 
 		// TODO Auto-generated method stub
 		

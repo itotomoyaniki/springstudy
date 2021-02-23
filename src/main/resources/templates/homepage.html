@@ -10,6 +10,7 @@
 		<nav th:include="parts::nav_parts"></nav>
 		<h1>ユーザー登録をしよう</h1>
 		<form method="post" action="/homepage" th:object="${userdatamodel}">
+			<p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
 			<p>名前</p>
 			<input type="text" name="name">
 			<p>性別</p>
